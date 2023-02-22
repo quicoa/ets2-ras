@@ -25,8 +25,12 @@ can install the dependencies using:
 pip install numpy mss pynput
 ```
 
+To download a copy of the script, clone the repository from GitHub (if you know
+how to use Git) or manually download
+[this](https://raw.githubusercontent.com/quicoa/ets2_ras/master/ras.py).
+
 You can then launch the script however you like, for example, to run from your
-shell, type:
+shell in the directory where you downloaded the script, type:
 
 ```sh
 python ./ras.py
