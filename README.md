@@ -29,7 +29,7 @@ You can then launch the script however you like, for example, to run from your
 shell, type:
 
 ```sh
-./ras.py
+python ./ras.py
 ```
 
 When no errors occur, the script is running and scanning you screen. Before
