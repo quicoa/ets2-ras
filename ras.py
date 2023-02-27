@@ -48,8 +48,8 @@ roi = {"top": 848, "left": 1584, "width": 210, "height": 1}
 # This should be the center of the region of interest.  If you have changed the
 # region of interest parameters so that this is not the case, set the position
 # here manually.
-center_static = roi["width"] / 2 - 1
-#center_static = 106
+center_static = roi["width"] / 2 - 0.5
+#center_static = 104.5
 
 # Sensitivity:
 # How much the software should respond to the error value.  This will cause
