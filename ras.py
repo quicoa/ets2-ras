@@ -32,12 +32,6 @@ import numpy as np
 from mss import mss
 from pynput import mouse
 
-# Function that decides if a pixel is colored
-def is_pixel_colored(red, green, blue):
-    # You can adjust these colors to you liking, but the default reddish color
-    # should be fine.  Colors range from 0 to 255
-    return red > 180 and green < 50 and blue < 50
-
 # Region of interest (roi) of the screen
 #
 # Preferably, half the 'width' parameter and the 'left' parameter added together
@@ -73,6 +67,24 @@ responsiveness = float(15)
 # How fast the software should iterate and adjust the steering controls.  A
 # higher number means shorter iteration sleep time.
 iteration_speed = 50
+
+# Color range
+#
+# Color values used to determine whether a pixel is colored or not.  You can
+# adjust these colors to you liking, but the default reddish color should be
+# fine.  Colors range from 0 to 255
+red_min = 200
+red_max = 255
+green_min = 0
+green_max = 25
+blue_min = 0
+blue_max = 25
+
+# Function that decides if a pixel is colored
+def is_pixel_colored(red, green, blue):
+    return red >= red_min and red <= red_max and \
+           green >= green_min and green <= green_max and \
+           blue >= blue_min and blue <= blue_max
 
 # Grab an instance of mss (for taking screenshots)
 sct = mss()
