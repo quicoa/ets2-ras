@@ -40,13 +40,16 @@ from pynput import mouse
 # A higher 'width' will give a greater field-of-view, but will be less
 # performant.
 # The defaults were determined when the game was in fullscreen.
-roi = {"top": 848, "left": 1584, "width": 210, "height": 1}
+roi_top = 850
+roi_left = 1625
+roi_width = 128
+roi_height = 1
 
 # Maximum amount of allowed colored pixels
 #
 # Whenever the amount of detected colored pixels exceeds this value, declare the
 # route guidance as unreliable and stop taking action.
-error_max = roi["width"] * 0.75
+error_max = roi_width * 0.75
 
 # Horizontal position of the center of the road (blue triangle on the route
 # advisor)
@@ -54,8 +57,8 @@ error_max = roi["width"] * 0.75
 # This should be the center of the region of interest.  If you have changed the
 # region of interest parameters so that this is not the case, set the position
 # here manually.
-center_static = roi["width"] / 2 - 0.5
-#center_static = 103.5
+center_static = roi_width / 2 - 0.5
+#center_static = 63.5
 
 # Sensitivity:
 # How much the software should respond to the error value.  This will cause
@@ -72,7 +75,7 @@ responsiveness = float(15)
 # Iteration speed:
 # How fast the software should iterate and adjust the steering controls.  A
 # higher number means shorter iteration sleep time.
-iteration_speed = 50
+iteration_speed = 75
 
 # Color range
 #
@@ -82,9 +85,9 @@ iteration_speed = 50
 red_min = 200
 red_max = 255
 green_min = 0
-green_max = 25
+green_max = 35
 blue_min = 0
-blue_max = 25
+blue_max = 35
 
 # Maximum amount of characters to print on one line
 print_max_length = 64
@@ -108,6 +111,9 @@ sct = mss()
 
 # Grab an instance of the mouse controls
 mouse = mouse.Controller()
+
+# Create region of interest dictionary
+roi = {"top": roi_top, "left": roi_left, "width": roi_width, "height": roi_height}
 
 # Variable containing the recorded error value from the previous iteration
 old_error = None
