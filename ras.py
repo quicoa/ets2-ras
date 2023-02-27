@@ -80,6 +80,17 @@ green_max = 25
 blue_min = 0
 blue_max = 25
 
+# Maximum amount of characters to print on one line
+print_max_length = 64
+
+# Character to print at the end of a printed line
+print_end_char = '\r'
+
+# Print text that overwrites the last printed line
+def print_line(string):
+    rest = print_max_length - len(string)
+    print(string[:print_max_length], ' ' * rest, end=print_end_char)
+
 # Function that decides if a pixel is colored
 def is_pixel_colored(red, green, blue):
     return red >= red_min and red <= red_max and \
@@ -134,7 +145,9 @@ while(True):
             found_last = True
 
     # Only respond when colored pixels were found
-    if found_first and found_last:
+    if not found_first or not found_last:
+        print_line("Route out of sight")
+    else:
         # Calculate the center of the colored area
         center_position = float(last_pixel - first_pixel) / 2
 
@@ -144,13 +157,21 @@ while(True):
         # Do not respond on first iteration (change in error is not known yet)
         if old_error != None:
             # Calculate the difference in error compared to the previous iteration
-            move = (error - old_error) * responsiveness
+            change = error - old_error
+            move = change * responsiveness
 
             # Also take the error into account
             move += error * sensitivity
 
             # Now move the mouse
             mouse.move(move, 0) # change in y is 0
+
+            # Print status
+            txt = "Left " + str(first_pixel - center_static) + "  " \
+                  "Right " + str(last_pixel - center_static) + "  " \
+                  "Offset " + str(error) + "  " \
+                  "Change " + str(change)
+            print_line(txt)
 
         # Record the current error for the next iteration
         old_error = error
