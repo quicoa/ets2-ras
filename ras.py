@@ -60,17 +60,17 @@ error_max = roi_width * 0.75
 center_static = roi_width / 2 - 0.5
 #center_static = 63.5
 
-# Sensitivity:
-# How much the software should respond to the error value.  This will cause
-# steering when the error is significant (that is, we are not driving where we
-# should)
-sensitivity = float(1 / 4)
-
-# Responsiveness:
-# How much the software should respond to a change in error value.  This will
-# cause steering when the error is changing during multiple iterations (that's
-# usually when we're in a turn)
-responsiveness = float(15)
+# PID parameters:
+# To calculate how much steering is needed, a PID controller is used.
+# Kp (Proportional control): Constant that specifies how much the controller
+#                            should respond to the error value.
+# Ki (Integral control): Constant that specifies how much the controller should
+#                        respond to the error value related to past iterations.
+# Kd (Derivative control): Constant that specifies how much the controller
+#                          should respond to changes in error value.
+Kp = float(1 / 4)
+Ki = float(0)
+Kd = float(15)
 
 # Iteration speed:
 # How fast the software should iterate and adjust the steering controls.  A
@@ -100,6 +100,15 @@ def print_line(string):
     rest = print_max_length - len(string)
     print(string[:print_max_length], ' ' * rest, end=print_end_char)
 
+# Clamp a value between a given limit
+def clamp(value, limit):
+    if value > limit:
+        return limit
+    elif value < -limit:
+        return -limit
+    else:
+        return value
+
 # Function that decides if a pixel is colored
 def is_pixel_colored(red, green, blue):
     return red >= red_min and red <= red_max and \
@@ -115,8 +124,12 @@ mouse = mouse.Controller()
 # Create region of interest dictionary
 roi = {"top": roi_top, "left": roi_left, "width": roi_width, "height": roi_height}
 
-# Variable containing the recorded error value from the previous iteration
+# Initialize error variables
+error = None
 old_error = None
+
+# Variables for the PID controller
+proportional = integral = derivative = 0
 
 # Run for as long as we're allowed to live
 while(True):
@@ -159,6 +172,7 @@ while(True):
     # Only respond when colored pixels were found
     if not found_first or not found_last:
         print_line("Route out of sight")
+        proportional = integral = derivative = 0
     else:
         # Calculate the width of the colored area
         width = last_pixel - first_pixel
@@ -178,19 +192,26 @@ while(True):
         if error != None and old_error != None:
             # Calculate the difference in error compared to the previous iteration
             change = error - old_error
-            move = change * responsiveness
 
-            # Also take the error into account
-            move += error * sensitivity
+            # Proportional control (assuming change in time equals 1)
+            proportional = Kp * error
+
+            # Integral control (assuming change in time equals 1)
+            integral += Ki * error
+
+            # Derivative control (assuming change in time equals 1)
+            derivative = Kd * change
 
             # Now move the mouse
+            move = clamp(proportional + integral + derivative, roi_width / 2)
             mouse.move(move, 0) # change in y is 0
 
             # Print status
-            txt = "Left " + str(first_pixel - center_static) + "  " \
-                  "Right " + str(last_pixel - center_static) + "  " \
-                  "Offset " + str(error) + "  " \
-                  "Change " + str(change)
+            txt = "P {:.2f}".format(proportional) + "  " \
+                  "I {:.2f}".format(integral) + "  " \
+                  "D {:.2f}".format(derivative) + "  " \
+                  "Offset {:.2f}".format(error) + "  " \
+                  "Change {:.2f}".format(change)
             print_line(txt)
 
         # Record the current error for the next iteration
