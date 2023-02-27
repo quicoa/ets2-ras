@@ -36,7 +36,7 @@ shell in the directory where you downloaded the script, type:
 python ./ras.py
 ```
 
-When no errors occur, the script is running and scanning you screen. Before
+When no errors occur, the script is running and scanning your screen. Before
 entering the road, take a moment to tweak and verify pre-defined parameters in
 the script to make sure it won't get confused and unintentionally damage your
 truck.

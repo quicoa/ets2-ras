@@ -71,7 +71,7 @@ iteration_speed = 50
 # Color range
 #
 # Color values used to determine whether a pixel is colored or not.  You can
-# adjust these colors to you liking, but the default reddish color should be
+# adjust these colors to your liking, but the default reddish color should be
 # fine.  Colors range from 0 to 255
 red_min = 200
 red_max = 255
