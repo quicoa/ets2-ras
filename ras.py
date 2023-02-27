@@ -42,6 +42,12 @@ from pynput import mouse
 # The defaults were determined when the game was in fullscreen.
 roi = {"top": 848, "left": 1584, "width": 210, "height": 1}
 
+# Maximum amount of allowed colored pixels
+#
+# Whenever the amount of detected colored pixels exceeds this value, declare the
+# route guidance as unreliable and stop taking action.
+error_max = roi["width"] * 0.75
+
 # Horizontal position of the center of the road (blue triangle on the route
 # advisor)
 #
@@ -49,7 +55,7 @@ roi = {"top": 848, "left": 1584, "width": 210, "height": 1}
 # region of interest parameters so that this is not the case, set the position
 # here manually.
 center_static = roi["width"] / 2 - 0.5
-#center_static = 104.5
+#center_static = 103.5
 
 # Sensitivity:
 # How much the software should respond to the error value.  This will cause
@@ -148,14 +154,22 @@ while(True):
     if not found_first or not found_last:
         print_line("Route out of sight")
     else:
-        # Calculate the center of the colored area
-        center_position = float(last_pixel - first_pixel) / 2
+        # Calculate the width of the colored area
+        width = last_pixel - first_pixel
 
-        # Calculate the error value
-        error = float(first_pixel + center_position - center_static)
+        # Calculate the center of the colored area
+        center_position = first_pixel + float(width) / 2
+
+        if width < error_max:
+            # Calculate the error value
+            error = center_position - center_static
+        else:
+            # Do not use the error value
+            print_line("Route detection unreliable")
+            error = None
 
         # Do not respond on first iteration (change in error is not known yet)
-        if old_error != None:
+        if error != None and old_error != None:
             # Calculate the difference in error compared to the previous iteration
             change = error - old_error
             move = change * responsiveness
