@@ -70,7 +70,7 @@ center_static = roi_width / 2 - 0.5
 #                          should respond to changes in error value.
 Kp = float(1 / 4)
 Ki = float(0)
-Kd = float(15)
+Kd = float(1 / 5)
 
 # Iteration speed:
 # How fast the software should iterate and adjust the steering controls.  A
@@ -127,6 +127,9 @@ roi = {"top": roi_top, "left": roi_left, "width": roi_width, "height": roi_heigh
 # Initialize error variables
 error = None
 old_error = None
+
+# Interval (sleep) time to use
+interval_time = (1 / iteration_speed)
 
 # Variables for the PID controller
 proportional = integral = derivative = 0
@@ -193,18 +196,22 @@ while(True):
             # Calculate the difference in error compared to the previous iteration
             change = error - old_error
 
-            # Proportional control (assuming change in time equals 1)
-            proportional = Kp * error
+            # Proportional control
+            proportional = error
 
-            # Integral control (assuming change in time equals 1)
-            integral += Ki * error
+            # Integral control
+            integral = integral + error * interval_time
+            integral = clamp(integral, roi_width / 2)
 
-            # Derivative control (assuming change in time equals 1)
-            derivative = Kd * change
+            # Derivative control
+            derivative = change / interval_time
+
+            # Calculate the output
+            output = Kp * proportional + Ki * integral + Kd * derivative
+            output = clamp(output, roi_width / 2)
 
             # Now move the mouse
-            move = clamp(proportional + integral + derivative, roi_width / 2)
-            mouse.move(move, 0) # change in y is 0
+            mouse.move(output, 0) # change in y is 0
 
             # Print status
             txt = "P {:.2f}".format(proportional) + "  " \
@@ -218,4 +225,4 @@ while(True):
         old_error = error
 
     # Give our actions a little time to take effect
-    time.sleep(1 / iteration_speed)
+    time.sleep(interval_time)
