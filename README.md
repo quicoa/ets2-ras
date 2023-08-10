@@ -10,10 +10,10 @@ needed.
 
 Because it is driven by red pixels on-screen, it will struggle to keep on the
 center of the road when the red guidance line is disturbed, for example when the
-current road crosses over a later section of the route or when the route advisor
-tells you to shift lanes. At that point, it becomes unreliable, so it is advised
-to set up some sort of keyboard shortcut or similar to suspend the script and
-take over manual control.
+current road crosses over a later or earlier section of the route or when the
+route advisor tells you to shift lanes. At that point, it becomes unreliable, so
+it is advised to set up some sort of keyboard shortcut or similar to suspend the
+script and take over manual control.
 
 ## Setup
 
@@ -26,8 +26,8 @@ pip install numpy mss pynput
 ```
 
 To download a copy of the script, clone the repository from GitHub (if you know
-how to use Git) or manually download
-[this](https://raw.githubusercontent.com/quicoa/ets2_ras/master/ras.py).
+how to use Git) or manually download from
+[here](https://raw.githubusercontent.com/quicoa/ets2_ras/master/ras.py).
 
 You can then launch the script however you like, for example, to run from your
 shell in the directory where you downloaded the script, type:
