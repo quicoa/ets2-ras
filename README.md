@@ -33,7 +33,7 @@ You can then launch the script however you like, for example, to run from your
 shell in the directory where you downloaded the script, type:
 
 ```sh
-python ./ras.py
+python3 ./ras.py
 ```
 
 When no errors occur, the script is running and scanning your screen. Before
