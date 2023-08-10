@@ -17,7 +17,7 @@ take over manual control.
 
 ## Setup
 
-The setup if pretty straight-forward. The script is written in Python and
+The setup is pretty straight-forward. The script is written in Python and
 requires the dependencies NumPy, mss and pynput. When Python is installed, you
 can install the dependencies using:
 
