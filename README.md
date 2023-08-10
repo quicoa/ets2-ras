@@ -36,6 +36,22 @@ shell in the directory where you downloaded the script, type:
 python3 ./ras.py
 ```
 
+Newer versions of python may complain about not running inside a virtual
+environment. To set up a virtual environment, execute the commands it advises
+you to run, which should be something like:
+
+```sh
+python3 -m venv --system-site-packages .
+```
+
+You can now install the dependencies in this virtual environment and run the
+script:
+
+```sh
+./bin/python3 -m pip install numpy mss pynput
+./bin/python3 ./ras.py
+```
+
 When no errors occur, the script is running and scanning your screen. Before
 entering the road, take a moment to tweak and verify pre-defined parameters in
 the script to make sure it won't get confused and unintentionally damage your
