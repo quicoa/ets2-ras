@@ -20,17 +20,18 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
-#
-# Route advisor steering for Euro Truck Simulator 2
-#
-# Monitor the red line of the in-game route advisor and steer with the mouse
-# controls to keep the truck on road.
+
+"""
+Route advisor steering (RAS) for Euro Truck Simulator 2
+
+Monitor the red line of the in-game route advisor and steer with the mouse
+controls to keep the truck on the road.
+"""
 
 import time
 import numpy as np
 from mss import mss
-from pynput import mouse
+from pynput.mouse import Controller
 
 # Region of interest (roi) of the screen
 #
@@ -95,22 +96,23 @@ print_max_length = 64
 # Character to print at the end of a printed line
 print_end_char = '\r'
 
-# Print text that overwrites the last printed line
 def print_line(string):
+    """Print text that overwrites the last printed line."""
     rest = print_max_length - len(string)
+
     print(string[:print_max_length], ' ' * rest, end=print_end_char)
 
-# Clamp a value between a given limit
 def clamp(value, limit):
+    """Clamp a value between a given limit."""
     if value > limit:
         return limit
-    elif value < -limit:
+    if value < -limit:
         return -limit
-    else:
-        return value
 
-# Function that decides if a pixel is colored
+    return value
+
 def is_pixel_colored(red, green, blue):
+    """Return whether a given pixel is colored."""
     return red >= red_min and red <= red_max and \
            green >= green_min and green <= green_max and \
            blue >= blue_min and blue <= blue_max
@@ -119,7 +121,7 @@ def is_pixel_colored(red, green, blue):
 sct = mss()
 
 # Grab an instance of the mouse controls
-mouse = mouse.Controller()
+controls = Controller()
 
 # Create region of interest dictionary
 roi = {"top": roi_top, "left": roi_left, "width": roi_width, "height": roi_height}
@@ -129,13 +131,13 @@ error = None
 old_error = None
 
 # Interval (sleep) time to use
-interval_time = (1 / iteration_speed)
+interval_time = 1 / iteration_speed
 
 # Variables for the PID controller
 proportional = integral = derivative = 0
 
 # Run for as long as we're allowed to live
-while(True):
+while True:
     # Grab the region of interest of the screen
     screen = sct.grab(roi)
     img = np.array(screen)
@@ -155,7 +157,7 @@ while(True):
     # Iterate over each pixel in the row
     for x in range(length):
         # Current pixel
-        pixel = row[x];
+        pixel = row[x]
 
         # Get each RGB value of this pixel
         red = pixel[2]
@@ -192,7 +194,7 @@ while(True):
             error = None
 
         # Do not respond on first iteration (change in error is not known yet)
-        if error != None and old_error != None:
+        if error is not None and old_error is not None:
             # Calculate the difference in error compared to the previous iteration
             change = error - old_error
 
@@ -211,7 +213,7 @@ while(True):
             output = clamp(output, roi_width / 2)
 
             # Now move the mouse
-            mouse.move(output, 0) # change in y is 0
+            controls.move(output, 0) # change in y is 0
 
             # Print status
             txt = "P {:.2f}".format(proportional) + "  " \
