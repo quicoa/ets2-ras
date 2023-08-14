@@ -22,7 +22,7 @@ requires the dependencies NumPy, mss and pynput. When Python is installed, you
 can install the dependencies using:
 
 ```sh
-pip install numpy mss pynput
+pip install -r requirements.txt
 ```
 
 To download a copy of the script, clone the repository from GitHub (if you know
@@ -48,7 +48,7 @@ You can now install the dependencies in this virtual environment and run the
 script:
 
 ```sh
-./bin/python3 -m pip install numpy mss pynput
+./bin/python3 -m pip install -r requirements.txt
 ./bin/python3 ./ras.py
 ```
 
