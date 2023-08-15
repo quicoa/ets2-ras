@@ -216,11 +216,11 @@ while True:
             controls.move(output, 0) # change in y is 0
 
             # Print status
-            txt = "P {:.2f}".format(proportional) + "  " \
-                  "I {:.2f}".format(integral) + "  " \
-                  "D {:.2f}".format(derivative) + "  " \
-                  "Offset {:.2f}".format(error) + "  " \
-                  "Change {:.2f}".format(change)
+            txt = f"P {proportional:.2f}  " \
+                  f"I {integral:.2f}  " \
+                  f"D {derivative:.2f}  " \
+                  f"Offset {error:.2f}  " \
+                  f"Change {change:.2f}"
             print_line(txt)
 
         # Record the current error for the next iteration
