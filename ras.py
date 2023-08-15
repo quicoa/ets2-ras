@@ -113,9 +113,9 @@ def clamp(value, limit):
 
 def is_pixel_colored(red, green, blue):
     """Return whether a given pixel is colored."""
-    return red >= red_min and red <= red_max and \
-           green >= green_min and green <= green_max and \
-           blue >= blue_min and blue <= blue_max
+    return red_min <= red <= red_max and \
+           green_min <= green <= green_max and \
+           blue_min <= blue <= blue_max
 
 # Grab an instance of mss (for taking screenshots)
 sct = mss()
