@@ -9,7 +9,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: Set up Python 3
       uses: actions/setup-python@v3
-    - name: Install dependencies
+    - name: Install Python linter
       run: pip install pylint
+    - name: Install dependencies
+      run: pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: pylint --disable=W0621 --disable=C0103 $(git ls-files '*.py')
